@@ -1,0 +1,39 @@
+generator client {
+    provider        = "prisma-client-js"
+    previewFeatures = ["multiSchema", "postgresqlExtensions"]
+    output          = "../dist"
+}
+
+datasource db {
+    provider   = "postgresql"
+    url        = env("DATABASE_URL")
+    schemas    = ["tree-service"]
+    extensions = [uuidOssp(map: "uuid-ossp")]
+}
+
+model Node {
+    id   String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+    name String
+
+    groupingNodeId    String? @map("grouping_node_id") @db.Uuid
+    groupingNode      Node?   @relation("nodeGroups", fields: [groupingNodeId], references: [id])
+    includedRootNodes Node[]  @relation("nodeGroups")
+
+    inEdges  Edge[] @relation("destinationNode")
+    outEdges Edge[] @relation("sourceNode")
+
+    @@map("nodes")
+    @@schema("tree-service")
+}
+
+model Edge {
+    sourceNodeId      String @map("source_node_id") @db.Uuid
+    destinationNodeId String @map("destination_node_id") @db.Uuid
+
+    sourceNode      Node @relation("sourceNode", fields: [sourceNodeId], references: [id])
+    destinationNode Node @relation("destinationNode", fields: [destinationNodeId], references: [id])
+
+    @@id([sourceNodeId, destinationNodeId])
+    @@map("edges")
+    @@schema("tree-service")
+}

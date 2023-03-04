@@ -1,0 +1,47 @@
+{
+  "name": "@wittypsyduck/tree-service-prisma",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "clean": "rm -rf ./dist",
+    "generate": "prisma generate",
+    "migrate": "prisma migrate dev --name init"
+  },
+  "author": {
+    "name": "wittypsyduck",
+    "email": "wittypsyduck@outlook.com"
+  },
+  "devDependencies": {
+    "@prisma/client": "^4.11.0",
+    "@tsconfig/node18-strictest-esm": "^1.0.1",
+    "prisma": "^4.11.0",
+    "typescript": "^4.9.5"
+  },
+  "prisma": {
+    "schema": "prisma/schema.prisma"
+  },
+  "exports": {
+    ".": null,
+    "./dist": null,
+    "./prisma": {
+      "import": "./dist/prisma/index.js"
+    },
+    "./types": {
+      "import": "./dist/types.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "prisma": [
+        "./dist/prisma/index.d.ts"
+      ],
+      "types": [
+        "./dist/types.d.ts"
+      ]
+    }
+  }
+}
