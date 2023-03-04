@@ -5,14 +5,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc -w",
     "clean": "rm -rf ./dist",
     "generate": "prisma generate",
     "migrate": "prisma migrate dev --name init"
   },
   "author": {
-    "name": "wittypsyduck",
+    "name": "WittyPsyduck",
     "email": "wittypsyduck@outlook.com"
   },
   "devDependencies": {

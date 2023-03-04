@@ -1,0 +1,60 @@
+{
+  "name": "@wittypsyduck/dag-service-client",
+  "version": "0.0.1",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "clean": "rm -rf ./dist",
+    "codegen": "graphql-codegen-esm --config codegen.yml"
+  },
+  "author": {
+    "name": "WittyPsyduck",
+    "email": "wittypsyduck@gmail.com"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.21.0",
+    "@graphql-codegen/add": "^4.0.1",
+    "@graphql-codegen/cli": "^3.2.1",
+    "@graphql-codegen/typescript-graphql-request": "^4.5.8",
+    "@graphql-codegen/typescript-operations": "^3.0.1",
+    "@graphql-codegen/typescript-type-graphql": "^2.3.6",
+    "@tsconfig/node18-strictest-esm": "^1.0.1",
+    "@types/node": "^18.14.6",
+    "class-validator": "^0.14.0",
+    "graphql": "^16.6.0",
+    "graphql-request": "^5.1.0",
+    "graphql-tag": "^2.12.6",
+    "type-graphql": "2.0.0-beta.1",
+    "typescript": "^4.9.5"
+  },
+  "files": [
+    "dist/sdks/**",
+    "dist/types/**"
+  ],
+  "exports": {
+    ".": null,
+    "./dist": null,
+    "./sdks": {
+      "import": "./dist/sdks/index.js"
+    },
+    "./types": {
+      "import": "./dist/types/index.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "sdk": [
+        "./dist/sdks/index.d.ts"
+      ],
+      "types": [
+        "./dist/types/index.d.ts"
+      ]
+    }
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": "https://github.com/wittypsyduck/dag-service"
+}

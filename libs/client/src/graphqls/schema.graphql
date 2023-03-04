@@ -1,0 +1,25 @@
+type ListMetadata {
+  count: Int!
+}
+
+type Node {
+  id: ID!
+  name: String!
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Query {
+  node(id: ID!): Node
+}
+
+type Mutation {
+  insertNode(id: ID!, node: NodeInput): Node
+}
+
+input NodeInput {
+  name: String!
+}

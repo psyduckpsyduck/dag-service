@@ -1,0 +1,10 @@
+fragment NodeFields on Node {
+  id
+  name
+}
+
+query Node($id: ID!) {
+  node(id: $id) {
+    ...NodeFields
+  }
+}

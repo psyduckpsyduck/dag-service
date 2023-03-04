@@ -1,0 +1,21 @@
+emitLegacyCommonJSImports: false
+generates:
+  src/types/index.ts:
+    schema: src/graphqls/schema.graphql
+    plugins:
+      - typescript-type-graphql:
+          useTypeImports: true
+          namingConvention:
+            enumValues: keep
+          enumsAsConst: true
+      - add:
+          content: '// @ts-nocheck'
+  src/sdks/index.ts:
+    schema: src/graphqls/schema.graphql
+    documents: src/graphqls/query.graphql
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-graphql-request:
+          useTypeImports: true
+          documentMode: documentNode
