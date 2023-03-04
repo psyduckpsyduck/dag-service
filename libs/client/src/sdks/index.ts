@@ -15,11 +15,6 @@ export type Scalars = {
   Float: number;
 };
 
-export type ListMetadata = {
-  __typename?: 'ListMetadata';
-  count: Scalars['Int'];
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
   insertNode?: Maybe<Node>;
@@ -34,6 +29,7 @@ export type MutationInsertNodeArgs = {
 export type Node = {
   __typename?: 'Node';
   id: Scalars['ID'];
+  includedRootNodes?: Maybe<Array<Node>>;
   name: Scalars['String'];
 };
 

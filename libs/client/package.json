@@ -7,7 +7,8 @@
     "build": "tsc",
     "watch": "tsc -w",
     "clean": "rm -rf ./dist",
-    "codegen": "graphql-codegen-esm --config codegen.yml"
+    "codegen": "graphql-codegen-esm --config codegen.yml",
+    "prebuild": "pnpm codegen"
   },
   "author": {
     "name": "WittyPsyduck",

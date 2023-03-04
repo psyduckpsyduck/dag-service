@@ -16,14 +16,6 @@ export type Scalars = {
   Float: number;
 };
 
-@TypeGraphQL.ObjectType()
-export class ListMetadata {
-  __typename?: 'ListMetadata';
-
-  @TypeGraphQL.Field(type => TypeGraphQL.Int)
-  count!: Scalars['Int'];
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
   insertNode?: Maybe<Node>;
@@ -46,6 +38,9 @@ export class Node {
 
   @TypeGraphQL.Field(type => TypeGraphQL.ID)
   id!: Scalars['ID'];
+
+  @TypeGraphQL.Field(type => [Node], { nullable: true })
+  includedRootNodes?: Maybe<Array<Node>>;
 
   @TypeGraphQL.Field(type => String)
   name!: Scalars['String'];

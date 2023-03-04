@@ -1,10 +1,7 @@
-type ListMetadata {
-  count: Int!
-}
-
 type Node {
   id: ID!
   name: String!
+  includedRootNodes: [Node!]
 }
 
 schema {
