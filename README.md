@@ -1,4 +1,4 @@
-# tree-service
-tree shape management service
+# dag-service
+service to manage DAG with database
 
 
