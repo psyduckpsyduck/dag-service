@@ -1,6 +1,6 @@
 {
   "name": "@wittypsyduck/tree-service-prisma",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "private": true,
   "type": "module",
@@ -25,23 +25,9 @@
     "schema": "prisma/schema.prisma"
   },
   "exports": {
-    ".": null,
-    "./dist": null,
-    "./prisma": {
-      "import": "./dist/prisma/index.js"
-    },
-    "./types": {
-      "import": "./dist/types.js"
+    ".": {
+      "import": "./dist/index.js"
     }
   },
-  "typesVersions": {
-    "*": {
-      "prisma": [
-        "./dist/prisma/index.d.ts"
-      ],
-      "types": [
-        "./dist/types.d.ts"
-      ]
-    }
-  }
+  "types": "./dist/index.d.ts"
 }
