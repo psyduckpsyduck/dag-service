@@ -1,5 +1,5 @@
 {
-  "name": "@wittypsyduck/tree-service-prisma",
+  "name": "@wittypsyduck/dag-service-prisma",
   "version": "0.0.1",
   "description": "",
   "private": true,
