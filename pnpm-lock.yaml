@@ -102,9 +102,6 @@ importers:
       prisma: 4.11.0
       typescript: 4.9.5
 
-  libs/prisma/dist:
-    specifiers: {}
-
 packages:
 
   /@ampproject/remapping/2.2.0:
