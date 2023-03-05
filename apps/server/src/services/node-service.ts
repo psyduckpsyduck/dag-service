@@ -9,6 +9,7 @@ import type {
   PrismaClient,
 } from '@wittypsyduck/dag-service-prisma'
 import { fromNullable, isNone, Option } from 'fp-ts/lib/Option'
+import { map } from 'ramda'
 
 const getById = async (
   prisma: PrismaClient,
@@ -31,14 +32,35 @@ const getById = async (
   )
 }
 
-// TODO: fix this method
-const makeNodeCreate = (
-  position: PositionInput,
-  node: NodeInput
-): Prisma.NodeCreateInput => {
+const makeEdge = (node: NodeInput): Prisma.EdgeCreateWithoutSourceNodeInput => {
   return {
-    name: node.name,
+    destinationNode: {
+      create: makeNode(node),
+    },
   }
+}
+
+const makeEdges = (
+  nodes: NodeInput[]
+): Prisma.EdgeCreateWithoutSourceNodeInput[] => {
+  return map(makeEdge, nodes)
+}
+
+const makeNode = (node: NodeInput): Prisma.NodeCreateInput => {
+  const { name, enclosedNodes, nextNodes } = node
+  return {
+    name,
+    enclosedNodes: {
+      create: makeNodes(enclosedNodes || []),
+    },
+    outEdges: {
+      create: makeEdges(nextNodes || []),
+    },
+  }
+}
+
+const makeNodes = (nodes: NodeInput[]): Prisma.NodeCreateInput[] => {
+  return map(makeNode, nodes)
 }
 
 const insertNode = async (
@@ -47,15 +69,19 @@ const insertNode = async (
   node: NodeInput
 ): Promise<Option<Node>> => {
   const { placement, referredNodeId } = position
-  const { name, enclosedNodes, nextNodes } = node
-  console.log(JSON.stringify(position, null, 2))
-  console.log(JSON.stringify(node, null, 2))
+  const { name, enclosedNodes, nextNodes = [] } = node
   const maybeReferredNode = fromNullable(referredNodeId)
   let createdNode
   if (isNone(maybeReferredNode)) {
     createdNode = await prisma.node.create({
       data: {
         name,
+        enclosedNodes: {
+          create: makeNodes(enclosedNodes || []),
+        },
+        outEdges: {
+          create: makeEdges(nextNodes || []),
+        },
       },
     })
   } else {
@@ -83,4 +109,17 @@ const insertNode = async (
   return fromNullable(createdNode)
 }
 
-export default { getById, insertNode }
+const deleteNode = async (
+  prisma: PrismaClient,
+  id: string
+): Promise<Option<Node>> => {
+  return fromNullable(
+    await prisma.node.delete({
+      where: {
+        id,
+      },
+    })
+  )
+}
+
+export default { getById, insertNode, deleteNode }

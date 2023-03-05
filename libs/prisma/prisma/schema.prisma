@@ -16,7 +16,7 @@ model Node {
     name String
 
     enclosingNodeId String? @map("enclosing_node_id") @db.Uuid
-    enclosingNode   Node?   @relation("nodeEnclosure", fields: [enclosingNodeId], references: [id])
+    enclosingNode   Node?   @relation("nodeEnclosure", fields: [enclosingNodeId], references: [id], onDelete: Cascade)
     enclosedNodes   Node[]  @relation("nodeEnclosure")
 
     inEdges  Edge[] @relation("destinationNode")
@@ -30,8 +30,8 @@ model Edge {
     sourceNodeId      String @map("source_node_id") @db.Uuid
     destinationNodeId String @map("destination_node_id") @db.Uuid
 
-    sourceNode      Node @relation("sourceNode", fields: [sourceNodeId], references: [id])
-    destinationNode Node @relation("destinationNode", fields: [destinationNodeId], references: [id])
+    sourceNode      Node @relation("sourceNode", fields: [sourceNodeId], references: [id], onDelete: Cascade)
+    destinationNode Node @relation("destinationNode", fields: [destinationNodeId], references: [id], onDelete: Cascade)
 
     @@id([sourceNodeId, destinationNodeId])
     @@map("edges")

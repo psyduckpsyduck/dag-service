@@ -28,6 +28,14 @@ class NodeResolver {
   ): Promise<Node | null> {
     return toNullable(await nodeService.insertNode(prisma, position, node))
   }
+
+  @Mutation(() => Node, { nullable: true })
+  async deleteNode(
+    @Arg('id', () => ID) id: string,
+    @Ctx() { prisma }: ServerContext
+  ): Promise<Node | null> {
+    return toNullable(await nodeService.deleteNode(prisma, id))
+  }
 }
 
 export default NodeResolver
