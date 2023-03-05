@@ -15,6 +15,12 @@ export type Scalars = {
   Float: number;
 };
 
+export type Edge = {
+  __typename?: 'Edge';
+  destinationNodeId: Scalars['String'];
+  sourceNodeId: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   insertNode?: Maybe<Node>;
@@ -28,21 +34,21 @@ export type MutationInsertNodeArgs = {
 
 export type Node = {
   __typename?: 'Node';
-  embededNodes?: Maybe<Array<Node>>;
+  enclosedNodes?: Maybe<Array<Node>>;
   id: Scalars['ID'];
   name: Scalars['String'];
-  nextNodes?: Maybe<Array<Node>>;
+  outEdges?: Maybe<Array<Edge>>;
 };
 
 export type NodeInput = {
-  embededNodes?: InputMaybe<Array<NodeInput>>;
+  enclosedNodes?: InputMaybe<Array<NodeInput>>;
   name: Scalars['String'];
   nextNodes?: InputMaybe<Array<NodeInput>>;
 };
 
 export enum NodePlacement {
-  Embeded = 'EMBEDED',
-  Flat = 'FLAT'
+  Enclosed = 'ENCLOSED',
+  Next = 'NEXT'
 }
 
 export type PositionInput = {

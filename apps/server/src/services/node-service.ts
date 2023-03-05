@@ -20,7 +20,12 @@ const getById = async (
         id,
       },
       include: {
-        embededNodes: true,
+        enclosedNodes: true,
+        outEdges: {
+          include: {
+            destinationNode: true,
+          },
+        },
       },
     })
   )
@@ -42,7 +47,7 @@ const insertNode = async (
   node: NodeInput
 ): Promise<Option<Node>> => {
   const { placement, referredNodeId } = position
-  const { name, embededNodes, nextNodes } = node
+  const { name, enclosedNodes, nextNodes } = node
   console.log(JSON.stringify(position, null, 2))
   console.log(JSON.stringify(node, null, 2))
   const maybeReferredNode = fromNullable(referredNodeId)
@@ -54,7 +59,7 @@ const insertNode = async (
       },
     })
   } else {
-    if (placement === NodePlacement.FLAT) {
+    if (placement === NodePlacement.NEXT) {
       createdNode = await prisma.node.create({
         data: {
           name,
@@ -69,7 +74,7 @@ const insertNode = async (
       createdNode = await prisma.node.create({
         data: {
           name,
-          groupingNodeId: referredNodeId!,
+          enclosingNodeId: referredNodeId!,
         },
       })
     }

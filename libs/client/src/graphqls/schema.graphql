@@ -1,8 +1,13 @@
 type Node {
   id: ID!
   name: String!
-  embededNodes: [Node!]
-  nextNodes: [Node!]
+  enclosedNodes: [Node!]
+  outEdges: [Edge!]
+}
+
+type Edge {
+  sourceNodeId: String!
+  destinationNodeId: String!
 }
 
 schema {
@@ -15,8 +20,8 @@ type Query {
 }
 
 enum NodePlacement {
-  FLAT
-  EMBEDED
+  NEXT
+  ENCLOSED
 }
 
 type Mutation {
@@ -30,6 +35,6 @@ input PositionInput {
 
 input NodeInput {
   name: String!
-  embededNodes: [NodeInput!]
   nextNodes: [NodeInput!]
+  enclosedNodes: [NodeInput!]
 }
