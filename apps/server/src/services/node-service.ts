@@ -63,32 +63,40 @@ const makeNodes = (nodes: NodeInput[]): Prisma.NodeCreateInput[] => {
   return map(makeNode, nodes)
 }
 
+const makeCreateNodeData = ({
+  name,
+  enclosedNodes,
+  nextNodes,
+}: NodeInput): Prisma.NodeCreateWithoutEnclosingNodeInput => {
+  return {
+    name,
+    enclosedNodes: {
+      create: makeNodes(enclosedNodes || []),
+    },
+    outEdges: {
+      create: makeEdges(nextNodes || []),
+    },
+  }
+}
+
 const insertNode = async (
   prisma: PrismaClient,
   position: PositionInput,
   node: NodeInput
 ): Promise<Option<Node>> => {
   const { placement, referredNodeId } = position
-  const { name, enclosedNodes, nextNodes = [] } = node
+  const nodeCreateData = makeCreateNodeData(node)
   const maybeReferredNode = fromNullable(referredNodeId)
   let createdNode
   if (isNone(maybeReferredNode)) {
     createdNode = await prisma.node.create({
-      data: {
-        name,
-        enclosedNodes: {
-          create: makeNodes(enclosedNodes || []),
-        },
-        outEdges: {
-          create: makeEdges(nextNodes || []),
-        },
-      },
+      data: nodeCreateData,
     })
   } else {
     if (placement === NodePlacement.NEXT) {
       createdNode = await prisma.node.create({
         data: {
-          name,
+          ...nodeCreateData,
           inEdges: {
             create: {
               sourceNodeId: referredNodeId!,
@@ -99,7 +107,7 @@ const insertNode = async (
     } else {
       createdNode = await prisma.node.create({
         data: {
-          name,
+          ...nodeCreateData,
           enclosingNodeId: referredNodeId!,
         },
       })
