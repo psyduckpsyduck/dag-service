@@ -7,7 +7,7 @@ generator client {
 datasource db {
     provider   = "postgresql"
     url        = env("DATABASE_URL")
-    schemas    = ["tree-service"]
+    schemas    = ["dag-service"]
     extensions = [uuidOssp(map: "uuid-ossp")]
 }
 
@@ -23,7 +23,7 @@ model Node {
     outEdges Edge[] @relation("sourceNode")
 
     @@map("nodes")
-    @@schema("tree-service")
+    @@schema("dag-service")
 }
 
 model Edge {
@@ -35,5 +35,5 @@ model Edge {
 
     @@id([sourceNodeId, destinationNodeId])
     @@map("edges")
-    @@schema("tree-service")
+    @@schema("dag-service")
 }
