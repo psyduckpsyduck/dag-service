@@ -18,18 +18,18 @@ export type Scalars = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  insertNode?: Maybe<Node>;
+  createNode?: Maybe<Node>;
 };
 
 
 @TypeGraphQL.ArgsType()
-export class MutationInsertNodeArgs {
+export class MutationCreateNodeArgs {
 
   @TypeGraphQL.Field(type => TypeGraphQL.ID)
   id!: Scalars['ID'];
 
   @TypeGraphQL.Field(type => NodeInput, { nullable: true })
-  node?: Maybe<NodeInput>;
+  input?: Maybe<NodeInput>;
 };
 
 @TypeGraphQL.ObjectType()
@@ -51,7 +51,20 @@ export class NodeInput {
 
   @TypeGraphQL.Field(type => String)
   name!: Scalars['String'];
+
+  @TypeGraphQL.Field(type => NodePlacement)
+  placement!: FixDecorator<NodePlacement>;
+
+  @TypeGraphQL.Field(type => String, { nullable: true })
+  referredNodeId?: Maybe<Scalars['String']>;
 };
+
+export const NodePlacement = {
+  EMBEDED: 'EMBEDED',
+  FLAT: 'FLAT'
+} as const;
+
+export type NodePlacement = typeof NodePlacement[keyof typeof NodePlacement];TypeGraphQL.registerEnumType(NodePlacement, { name: 'NodePlacement' });
 
 export type Query = {
   __typename?: 'Query';

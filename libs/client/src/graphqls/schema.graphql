@@ -13,10 +13,17 @@ type Query {
   node(id: ID!): Node
 }
 
+enum NodePlacement {
+  FLAT
+  EMBEDED
+}
+
 type Mutation {
-  insertNode(id: ID!, node: NodeInput): Node
+  createNode(id: ID!, input: NodeInput): Node
 }
 
 input NodeInput {
   name: String!
+  placement: NodePlacement!
+  referredNodeId: String
 }

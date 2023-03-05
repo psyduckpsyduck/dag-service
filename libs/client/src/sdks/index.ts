@@ -17,13 +17,13 @@ export type Scalars = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  insertNode?: Maybe<Node>;
+  createNode?: Maybe<Node>;
 };
 
 
-export type MutationInsertNodeArgs = {
+export type MutationCreateNodeArgs = {
   id: Scalars['ID'];
-  node?: InputMaybe<NodeInput>;
+  input?: InputMaybe<NodeInput>;
 };
 
 export type Node = {
@@ -35,7 +35,14 @@ export type Node = {
 
 export type NodeInput = {
   name: Scalars['String'];
+  placement: NodePlacement;
+  referredNodeId?: InputMaybe<Scalars['String']>;
 };
+
+export enum NodePlacement {
+  Embeded = 'EMBEDED',
+  Flat = 'FLAT'
+}
 
 export type Query = {
   __typename?: 'Query';
