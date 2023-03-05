@@ -1,8 +1,13 @@
 import {
-  InsertNodeInput,
+  NodeInput,
   NodePlacement,
+  PositionInput,
 } from '@wittypsyduck/dag-service-client/types'
-import type { Node, PrismaClient } from '@wittypsyduck/dag-service-prisma'
+import type {
+  Node,
+  Prisma,
+  PrismaClient,
+} from '@wittypsyduck/dag-service-prisma'
 import { fromNullable, isNone, Option } from 'fp-ts/lib/Option'
 
 const getById = async (
@@ -21,12 +26,25 @@ const getById = async (
   )
 }
 
+// TODO: fix this method
+const makeNodeCreate = (
+  position: PositionInput,
+  node: NodeInput
+): Prisma.NodeCreateInput => {
+  return {
+    name: node.name,
+  }
+}
+
 const insertNode = async (
   prisma: PrismaClient,
-  input: InsertNodeInput
+  position: PositionInput,
+  node: NodeInput
 ): Promise<Option<Node>> => {
-  const { name, placement, referredNodeId, embededNodes, nextNodes } = input
-  console.log(JSON.stringify(input, null, 2))
+  const { placement, referredNodeId } = position
+  const { name, embededNodes, nextNodes } = node
+  console.log(JSON.stringify(position, null, 2))
+  console.log(JSON.stringify(node, null, 2))
   const maybeReferredNode = fromNullable(referredNodeId)
   let createdNode
   if (isNone(maybeReferredNode)) {

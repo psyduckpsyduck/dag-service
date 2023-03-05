@@ -20,19 +20,16 @@ enum NodePlacement {
 }
 
 type Mutation {
-  insertNode(input: InsertNodeInput): Node
+  insertNode(position: PositionInput, node: NodeInput!): Node
+}
+
+input PositionInput {
+  placement: NodePlacement!
+  referredNodeId: String
 }
 
 input NodeInput {
   name: String!
-  embededNodes: [NodeInput!]
-  nextNodes: [NodeInput!]
-}
-
-input InsertNodeInput {
-  name: String!
-  placement: NodePlacement!
-  referredNodeId: String
   embededNodes: [NodeInput!]
   nextNodes: [NodeInput!]
 }

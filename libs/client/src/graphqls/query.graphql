@@ -9,8 +9,8 @@ query Node($id: ID!) {
   }
 }
 
-mutation insertNode($input: InsertNodeInput!) {
-  insertNode(input: $input) {
+mutation insertNode($position: PositionInput, $node: NodeInput!) {
+  insertNode(position: $position, node: $node) {
     ...NodeFields
   }
 }
