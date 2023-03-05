@@ -1,5 +1,5 @@
 import {
-  NodeInput,
+  InsertNodeInput,
   NodePlacement,
 } from '@wittypsyduck/dag-service-client/types'
 import type { Node, PrismaClient } from '@wittypsyduck/dag-service-prisma'
@@ -14,15 +14,19 @@ const getById = async (
       where: {
         id,
       },
+      include: {
+        embededNodes: true,
+      },
     })
   )
 }
 
-const createNode = async (
+const insertNode = async (
   prisma: PrismaClient,
-  { name, placement, referredNodeId }: NodeInput
+  input: InsertNodeInput
 ): Promise<Option<Node>> => {
-  console.log(name, placement, referredNodeId)
+  const { name, placement, referredNodeId, embededNodes, nextNodes } = input
+  console.log(JSON.stringify(input, null, 2))
   const maybeReferredNode = fromNullable(referredNodeId)
   let createdNode
   if (isNone(maybeReferredNode)) {
@@ -56,4 +60,4 @@ const createNode = async (
   return fromNullable(createdNode)
 }
 
-export default { getById, createNode }
+export default { getById, insertNode }

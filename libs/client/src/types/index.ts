@@ -16,47 +16,66 @@ export type Scalars = {
   Float: number;
 };
 
-export type Mutation = {
-  __typename?: 'Mutation';
-  createNode?: Maybe<Node>;
-};
-
-
-@TypeGraphQL.ArgsType()
-export class MutationCreateNodeArgs {
-
-  @TypeGraphQL.Field(type => TypeGraphQL.ID)
-  id!: Scalars['ID'];
-
-  @TypeGraphQL.Field(type => NodeInput, { nullable: true })
-  input?: Maybe<NodeInput>;
-};
-
-@TypeGraphQL.ObjectType()
-export class Node {
-  __typename?: 'Node';
-
-  @TypeGraphQL.Field(type => TypeGraphQL.ID)
-  id!: Scalars['ID'];
-
-  @TypeGraphQL.Field(type => [Node], { nullable: true })
-  includedRootNodes?: Maybe<Array<Node>>;
-
-  @TypeGraphQL.Field(type => String)
-  name!: Scalars['String'];
-};
-
 @TypeGraphQL.InputType()
-export class NodeInput {
+export class InsertNodeInput {
+
+  @TypeGraphQL.Field(type => [NodeInput], { nullable: true })
+  embededNodes?: Maybe<Array<NodeInput>>;
 
   @TypeGraphQL.Field(type => String)
   name!: Scalars['String'];
+
+  @TypeGraphQL.Field(type => [NodeInput], { nullable: true })
+  nextNodes?: Maybe<Array<NodeInput>>;
 
   @TypeGraphQL.Field(type => NodePlacement)
   placement!: FixDecorator<NodePlacement>;
 
   @TypeGraphQL.Field(type => String, { nullable: true })
   referredNodeId?: Maybe<Scalars['String']>;
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  insertNode?: Maybe<Node>;
+};
+
+
+@TypeGraphQL.ArgsType()
+export class MutationInsertNodeArgs {
+
+  @TypeGraphQL.Field(type => InsertNodeInput, { nullable: true })
+  input?: Maybe<InsertNodeInput>;
+};
+
+@TypeGraphQL.ObjectType()
+export class Node {
+  __typename?: 'Node';
+
+  @TypeGraphQL.Field(type => [Node], { nullable: true })
+  embededNodes?: Maybe<Array<Node>>;
+
+  @TypeGraphQL.Field(type => TypeGraphQL.ID)
+  id!: Scalars['ID'];
+
+  @TypeGraphQL.Field(type => String)
+  name!: Scalars['String'];
+
+  @TypeGraphQL.Field(type => [Node], { nullable: true })
+  nextNodes?: Maybe<Array<Node>>;
+};
+
+@TypeGraphQL.InputType()
+export class NodeInput {
+
+  @TypeGraphQL.Field(type => [NodeInput], { nullable: true })
+  embededNodes?: Maybe<Array<NodeInput>>;
+
+  @TypeGraphQL.Field(type => String)
+  name!: Scalars['String'];
+
+  @TypeGraphQL.Field(type => [NodeInput], { nullable: true })
+  nextNodes?: Maybe<Array<NodeInput>>;
 };
 
 export const NodePlacement = {

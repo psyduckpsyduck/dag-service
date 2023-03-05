@@ -1,4 +1,4 @@
-import { Node, NodeInput } from '@wittypsyduck/dag-service-client/types'
+import { InsertNodeInput, Node } from '@wittypsyduck/dag-service-client/types'
 import { toNullable } from 'fp-ts/lib/Option'
 import { Arg, Ctx, ID, Mutation, Query, Resolver } from 'type-graphql'
 import nodeService from '../services/node-service'
@@ -11,16 +11,18 @@ class NodeResolver {
     @Arg('id', () => ID) id: string,
     @Ctx() { prisma }: ServerContext
   ): Promise<Node | null> {
-    return toNullable(await nodeService.getById(prisma, id))
+    const rootNode = await nodeService.getById(prisma, id)
+    console.log(rootNode)
+    return toNullable(rootNode)
   }
 
   @Mutation(() => Node, { nullable: true })
-  async createNode(
-    @Arg('input', () => NodeInput)
-    input: NodeInput,
+  async insertNode(
+    @Arg('input', () => InsertNodeInput)
+    input: InsertNodeInput,
     @Ctx() { prisma }: ServerContext
   ): Promise<Node | null> {
-    return toNullable(await nodeService.createNode(prisma, input))
+    return toNullable(await nodeService.insertNode(prisma, input))
   }
 }
 

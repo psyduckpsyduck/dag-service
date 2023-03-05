@@ -1,7 +1,8 @@
 type Node {
   id: ID!
   name: String!
-  includedRootNodes: [Node!]
+  embededNodes: [Node!]
+  nextNodes: [Node!]
 }
 
 schema {
@@ -19,11 +20,19 @@ enum NodePlacement {
 }
 
 type Mutation {
-  createNode(id: ID!, input: NodeInput): Node
+  insertNode(input: InsertNodeInput): Node
 }
 
 input NodeInput {
   name: String!
+  embededNodes: [NodeInput!]
+  nextNodes: [NodeInput!]
+}
+
+input InsertNodeInput {
+  name: String!
   placement: NodePlacement!
   referredNodeId: String
+  embededNodes: [NodeInput!]
+  nextNodes: [NodeInput!]
 }

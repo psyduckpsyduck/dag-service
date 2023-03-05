@@ -15,9 +15,9 @@ model Node {
     id   String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
     name String
 
-    groupingNodeId    String? @map("grouping_node_id") @db.Uuid
-    groupingNode      Node?   @relation("nodeGroups", fields: [groupingNodeId], references: [id])
-    includedRootNodes Node[]  @relation("nodeGroups")
+    groupingNodeId String? @map("grouping_node_id") @db.Uuid
+    groupingNode   Node?   @relation("nodeGroups", fields: [groupingNodeId], references: [id])
+    embededNodes   Node[]  @relation("nodeGroups")
 
     inEdges  Edge[] @relation("destinationNode")
     outEdges Edge[] @relation("sourceNode")

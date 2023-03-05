@@ -8,3 +8,9 @@ query Node($id: ID!) {
     ...NodeFields
   }
 }
+
+mutation insertNode($input: InsertNodeInput!) {
+  insertNode(input: $input) {
+    ...NodeFields
+  }
+}
