@@ -15,25 +15,25 @@ model Node {
     id   String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
     name String
 
-    enclosingNodeId String? @map("enclosing_node_id") @db.Uuid
-    enclosingNode   Node?   @relation("nodeEnclosure", fields: [enclosingNodeId], references: [id], onDelete: Cascade)
-    enclosedNodes   Node[]  @relation("nodeEnclosure")
+    enclosingNodeId String @map("enclosing_node_id") @db.Uuid
+    enclosingNode   Node   @relation("nodeEnclosure", fields: [enclosingNodeId], references: [id], onDelete: Cascade)
+    enclosedNodes   Node[] @relation("nodeEnclosure")
 
-    inEdges  Edge[] @relation("destinationNode")
-    outEdges Edge[] @relation("sourceNode")
+    inEdges  Edge[] @relation("toNode")
+    outEdges Edge[] @relation("fromNode")
 
     @@map("nodes")
     @@schema("dag-service")
 }
 
 model Edge {
-    sourceNodeId      String @map("source_node_id") @db.Uuid
-    destinationNodeId String @map("destination_node_id") @db.Uuid
+    from String @map("from") @db.Uuid
+    to   String @map("to") @db.Uuid
 
-    sourceNode      Node @relation("sourceNode", fields: [sourceNodeId], references: [id], onDelete: Cascade)
-    destinationNode Node @relation("destinationNode", fields: [destinationNodeId], references: [id], onDelete: Cascade)
+    fromNode Node @relation("fromNode", fields: [from], references: [id], onDelete: Cascade)
+    toNode   Node @relation("toNode", fields: [to], references: [id], onDelete: Cascade)
 
-    @@id([sourceNodeId, destinationNodeId])
+    @@id([from, to])
     @@map("edges")
     @@schema("dag-service")
 }

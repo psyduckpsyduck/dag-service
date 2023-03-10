@@ -36,6 +36,11 @@ class NodeResolver {
   ): Promise<Node | null> {
     return toNullable(await nodeService.deleteNode(prisma, id))
   }
+
+  @Query(() => [Node])
+  async getRoots(@Ctx() { prisma }: ServerContext): Promise<Node[]> {
+    return await nodeService.getRoots(prisma)
+  }
 }
 
 export default NodeResolver
