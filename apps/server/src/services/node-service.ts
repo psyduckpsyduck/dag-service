@@ -155,8 +155,25 @@ const deleteNode = async (
   )
 }
 
-const getRoots = async (prisma: PrismaClient): Promise<Node[]> => {
-  return []
+const getRoots = async (
+  prisma: PrismaClient,
+  enclosingNodeId: string = ROOT_NODE_ID
+): Promise<Node[]> => {
+  return await prisma.node.findMany({
+    where: {
+      id: {
+        not: enclosingNodeId,
+      },
+      enclosingNodeId,
+      inEdges: {
+        every: {
+          fromNode: {
+            id: enclosingNodeId,
+          },
+        },
+      },
+    },
+  })
 }
 
 export default { getById, insertNode, deleteNode, getRoots, initDatabase }
