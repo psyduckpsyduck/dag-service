@@ -13,6 +13,22 @@ import { map } from 'ramda'
 import { ROOT_NODE_ID } from '../consts'
 import { isNilOrEmpty } from '../utils'
 
+const initDatabase = async (prisma: PrismaClient): Promise<Option<Node>> => {
+  return fromNullable(
+    await prisma.node.upsert({
+      create: {
+        id: ROOT_NODE_ID,
+        name: 'ROOT',
+        enclosingNodeId: ROOT_NODE_ID,
+      },
+      where: {
+        id: ROOT_NODE_ID,
+      },
+      update: {},
+    })
+  )
+}
+
 const getById = async (
   prisma: PrismaClient,
   id: string
@@ -143,4 +159,4 @@ const getRoots = async (prisma: PrismaClient): Promise<Node[]> => {
   return []
 }
 
-export default { getById, insertNode, deleteNode, getRoots }
+export default { getById, insertNode, deleteNode, getRoots, initDatabase }

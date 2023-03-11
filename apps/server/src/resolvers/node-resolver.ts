@@ -1,10 +1,10 @@
 import {
-  PositionInput,
-  NodeInput,
   Node,
+  NodeInput,
+  PositionInput,
 } from '@wittypsyduck/dag-service-client/types'
 import { toNullable } from 'fp-ts/lib/Option'
-import { Arg, Ctx, ID, Mutation, Query, Resolver } from 'type-graphql'
+import { Arg, Ctx, ID, Maybe, Mutation, Query, Resolver } from 'type-graphql'
 import nodeService from '../services/node-service'
 import type { ServerContext } from '../types'
 
@@ -40,6 +40,11 @@ class NodeResolver {
   @Query(() => [Node])
   async getRoots(@Ctx() { prisma }: ServerContext): Promise<Node[]> {
     return await nodeService.getRoots(prisma)
+  }
+
+  @Mutation(() => Node, { nullable: true })
+  async initDatabase(@Ctx() { prisma }: ServerContext): Promise<Maybe<Node>> {
+    return toNullable(await nodeService.initDatabase(prisma))
   }
 }
 
