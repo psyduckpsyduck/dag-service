@@ -7,10 +7,11 @@ import type {
   Prisma,
   PrismaClient,
 } from '@wittypsyduck/dag-service-prisma'
-import { pipe } from 'fp-ts/lib/function'
-import { fromNullable, isNone, Option } from 'fp-ts/lib/Option'
+import type * as E from 'fp-ts/Either'
+import { chain, fromNullable, isNone, none, Option } from 'fp-ts/lib/Option'
 import { map } from 'ramda'
 import { ROOT_NODE_ID } from '../consts'
+import { getById as getByIdDao } from '../daos/node-dao'
 import { isNilOrEmpty } from '../utils'
 
 const initDatabase = async (prisma: PrismaClient): Promise<Option<Node>> => {
@@ -32,14 +33,8 @@ const initDatabase = async (prisma: PrismaClient): Promise<Option<Node>> => {
 const getById = async (
   prisma: PrismaClient,
   id: string
-): Promise<Option<Node>> => {
-  return fromNullable(
-    await prisma.node.findUnique({
-      where: {
-        id,
-      },
-    })
-  )
+): Promise<E.Either<String, Option<Node>>> => {
+  return await getByIdDao(id)(prisma)()
 }
 
 const makeEdge = (node: NodeInput): Prisma.EdgeCreateWithoutFromNodeInput => {
@@ -96,6 +91,12 @@ const makeCreateNodeData = (
   }
 }
 
+const doInsertNode =
+  (prisma: PrismaClient) =>
+  async (node: Node): Promise<Option<Node>> => {
+    return none
+  }
+
 const insertNode = async (
   prisma: PrismaClient,
   position: PositionInput,
@@ -105,7 +106,7 @@ const insertNode = async (
     ? ROOT_NODE_ID
     : position.referredNodeId!
   const maybeReferredNode = await getById(prisma, referredNodeId)
-  return pipe(maybeReferredNode)
+  return chain(maybeReferredNode, doInsertNode(prisma))
   if (isNone(maybeReferredNode)) {
   }
   const nodeCreateData = makeCreateNodeData(position, node)

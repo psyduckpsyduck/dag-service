@@ -3,7 +3,9 @@ import {
   NodeInput,
   PositionInput,
 } from '@wittypsyduck/dag-service-client/types'
+import * as E from 'fp-ts/Either'
 import { toNullable } from 'fp-ts/lib/Option'
+import * as O from 'fp-ts/Option'
 import { Arg, Ctx, ID, Maybe, Mutation, Query, Resolver } from 'type-graphql'
 import nodeService from '../services/node-service'
 import type { ServerContext } from '../types'
@@ -16,8 +18,7 @@ class NodeResolver {
     @Ctx() { prisma }: ServerContext
   ): Promise<Node | null> {
     const rootNode = await nodeService.getById(prisma, id)
-    console.log(rootNode)
-    return toNullable(rootNode)
+    return E.isRight(rootNode) ? O.toNullable(rootNode.right) : null
   }
 
   @Mutation(() => Node, { nullable: true })
